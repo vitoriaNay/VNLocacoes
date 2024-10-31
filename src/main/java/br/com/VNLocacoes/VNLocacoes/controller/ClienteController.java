@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController // COMBINA AS ANOTAÇÕES DE @Controller e @ResponseBody, ÚTIL PARA DESENVOLVER SERVIÇOS RESTful
 @RequestMapping("/cliente") // MAPEIA AS SOLICITAÇÕES DA WEB QUE SERÃO ATENDIDAS POR ESTE CONTROLADOR
@@ -30,5 +31,18 @@ public class ClienteController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(listaDeClientes);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> atualizarDadosDoCLiente(@PathVariable(value = "id") Long id, @RequestBody ClienteEntity cliente) {
+        Optional<ClienteEntity> clienteAtualizado = clienteService.atualizarDadosDoCliente(id, cliente);
+
+        if (clienteAtualizado.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Usuário não encontrado");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(clienteAtualizado);
     }
 }
