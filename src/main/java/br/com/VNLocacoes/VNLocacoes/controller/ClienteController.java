@@ -1,7 +1,9 @@
 package br.com.VNLocacoes.VNLocacoes.controller;
 
+import br.com.VNLocacoes.VNLocacoes.dto.ClienteDTO;
 import br.com.VNLocacoes.VNLocacoes.entity.ClienteEntity;
 import br.com.VNLocacoes.VNLocacoes.service.ClienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,31 +20,45 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping // DEFINE O VERBO HTTP QUE SERÁ ATENDIDO POR ESTE MÉTODO (PostMapping, GetMapping, PutMapping, DeleteMapping)
-    public ResponseEntity<ClienteEntity> salvarCliente(@RequestBody ClienteEntity cliente) {
-        var clienteSalvo = clienteService.salvarCliente(cliente);
+    public ResponseEntity<ClienteDTO> salvarCliente(@RequestBody @Valid ClienteDTO cliente) {
+        ClienteDTO clienteSalvo = clienteService.salvarCliente(cliente);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(clienteSalvo);
     }
 
     @GetMapping
-    public ResponseEntity<List<ClienteEntity>> listarTodosOsClientes() {
-        var listaDeClientes = clienteService.listarTodosOsClientes();
+    public ResponseEntity<List<ClienteDTO>> buscarTodosOsClientes() {
+        var listaDeClientes = clienteService.buscarTodosOsClientes();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(listaDeClientes);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> atualizarDadosDoCLiente(@PathVariable(value = "id") Long id, @RequestBody ClienteEntity cliente) {
-        Optional<ClienteEntity> clienteAtualizado = clienteService.atualizarDadosDoCliente(id, cliente);
-
-        if (clienteAtualizado.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Usuário não encontrado");
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteDTO> buscarClientePorId(@PathVariable(name = "id") Long id) {
+        ClienteDTO clienteExistente = clienteService.buscarClientePorId(id);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(clienteAtualizado);
+                .body(clienteExistente);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> atualizarDadosDoCLiente(@PathVariable(value = "id") Long id, @RequestBody @Valid ClienteDTO cliente) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(clienteService.atualizarDadosDoCliente(id, cliente));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deletarCliente(@PathVariable(name = "id") Long id) {
+        boolean statusDelecao = clienteService.deletarCliente(id);
+
+        if (statusDelecao) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Cliente excluído com sucesso");
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Houve algum erro na requisição, tente novamente mais tarde");
     }
 }

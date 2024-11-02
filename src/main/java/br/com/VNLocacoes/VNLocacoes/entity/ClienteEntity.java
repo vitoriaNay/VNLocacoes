@@ -18,19 +18,14 @@ public class ClienteEntity {
 
     @Id // DEFINE ESTE CAMPO COMO SENDO A (OU PARTE DA) CHAVE PRIMÁRIA DA ENTIDADE
     @GeneratedValue(strategy = GenerationType.IDENTITY) // DEFINE QUE ESTE CAMPO VAI SER GERADO POR UM GERADOR (AUTOMÁTICO)
-    @Column(name = "id") // DEFINE A COLUNA ONDE ESTE CAMPO É ARMAZENADO E ADICIONA RESTRIÇÕES
     private Long id;
 
-    @Column(name = "nome", nullable = false)
-    String nome;
+    private String nome;
 
-    @Column(name = "cpf", nullable = false)
     private String cpf;
 
-    @Column(name = "telefone")
     private String telefone;
 
-    @Column(name = "email")
     private String email;
 
 }
