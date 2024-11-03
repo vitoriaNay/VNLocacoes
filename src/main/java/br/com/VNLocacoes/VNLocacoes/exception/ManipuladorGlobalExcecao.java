@@ -38,4 +38,15 @@ public class ManipuladorGlobalExcecao {
                         "Dados inválidos no corpo da requisição",
                         listaErros));
     }
+
+    @ExceptionHandler(TokenVerificacaoExcecao.class)
+    public ResponseEntity<RespostaExcecao> tokenVerificacaoExcecao(TokenVerificacaoExcecao e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new RespostaExcecao(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+    }
+//    @ExceptionHandler(StackOverflowError.class)
+//    public ResponseEntity<RespostaExcecao> erro(StackOverflowError e) {
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                .body(new RespostaExcecao(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+//    }
 }
