@@ -47,7 +47,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException e) {
-            throw new TokenVerificacaoExcecao("Houve um erro na verificação do token");
+            return "";
         }
     }
 
