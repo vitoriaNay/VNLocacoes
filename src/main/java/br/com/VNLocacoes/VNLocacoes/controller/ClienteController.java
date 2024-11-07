@@ -29,10 +29,10 @@ public class ClienteController {
 
     @GetMapping
     public ResponseEntity<List<ClienteDTO>> buscarTodosOsClientes() {
-        var listaDeClientes = clienteService.buscarTodosOsClientes();
+        List<ClienteDTO> listaClientes = clienteService.buscarTodosOsClientes();
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(listaDeClientes);
+                .body(listaClientes);
     }
 
     @GetMapping("/{id}")

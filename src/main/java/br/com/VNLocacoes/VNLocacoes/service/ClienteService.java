@@ -20,7 +20,7 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
 
     public ClienteDTO salvarCliente(ClienteDTO cliente) {
-        var clienteSalvo = clienteRepository.save(ClienteMapper.INSTANCE.toEntity(cliente));
+        ClienteEntity clienteSalvo = clienteRepository.save(ClienteMapper.INSTANCE.toEntity(cliente));
 
         return ClienteMapper.INSTANCE.toDTO(clienteSalvo);
     }
