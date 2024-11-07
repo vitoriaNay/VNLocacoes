@@ -1,10 +1,14 @@
 package br.com.VNLocacoes.VNLocacoes.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "categoria")
@@ -21,4 +25,9 @@ public class CategoriaEntity {
     private String nome;
 
     private String descricao;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "listaCategorias")
+    private List<CarroEntity> listaCarros = new ArrayList<>();
+
 }
