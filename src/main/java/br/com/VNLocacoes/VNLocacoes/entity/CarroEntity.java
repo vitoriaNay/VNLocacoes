@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class CarroEntity {
 
     private boolean disponibilidade;
 
-    private float valorDiaria;
+    private BigDecimal valorDiaria;
 
     @JsonIgnore
     @ManyToOne
