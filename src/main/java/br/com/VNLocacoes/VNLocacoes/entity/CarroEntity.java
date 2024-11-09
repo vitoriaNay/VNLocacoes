@@ -34,16 +34,11 @@ public class CarroEntity {
 
     private BigDecimal valorDiaria;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_marca", nullable = false)
-    MarcaEntity marca;
+    private MarcaEntity marca;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "Carro_Categoria",
-            joinColumns = @JoinColumn(name = "id_carro", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "id_categoria", nullable = false)
-    )
-    private List<CategoriaEntity> listaCategorias = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "id_categoria", nullable = false)
+    private CategoriaEntity categoria;
 }

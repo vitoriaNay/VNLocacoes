@@ -72,4 +72,14 @@ public class CategoriaService {
 
         return true;
     }
+
+    public CategoriaDTO buscarCategoriaPorNome(String nome) {
+        Optional<CategoriaEntity> categoriaOptional = categoriaRepository.findByNome(nome);
+
+        if (categoriaOptional.isEmpty()) {
+            throw new RegistroNaoEncontradoExcecao("Categoria não encontrada");
+        }
+
+        return CategoriaMapper.INSTANCE.toDTO(categoriaOptional.get());
+    }
 }

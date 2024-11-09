@@ -1,5 +1,7 @@
 package br.com.VNLocacoes.VNLocacoes.dto;
 
+import br.com.VNLocacoes.VNLocacoes.entity.CategoriaEntity;
+import br.com.VNLocacoes.VNLocacoes.entity.MarcaEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,8 +26,14 @@ public class CarroDTO {
     private String placa;
 
     @NotNull(message = "Informe a disponibilidade do veículo")
-    private boolean disponibilidade;
+    private boolean disponibilidade = true;
 
     @NotNull(message = "Informe o valor do aluguel diário do veículo")
     private float valorDiaria;
+
+    @NotNull(message = "Informe a marca do carro")
+    private MarcaEntity marca;
+
+    @NotNull(message = "Informe a categoria do veículo")
+    private CategoriaEntity categoria;
 }

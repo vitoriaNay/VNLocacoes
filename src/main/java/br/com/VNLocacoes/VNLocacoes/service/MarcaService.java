@@ -72,4 +72,14 @@ public class MarcaService {
 
         return true;
     }
+
+    public MarcaDTO buscarMarcaPorNome(String nome) {
+        Optional<MarcaEntity> marcaOptional = marcaRepository.findByNome(nome);
+
+        if (marcaOptional.isEmpty()) {
+            throw new RegistroNaoEncontradoExcecao("Marca não encontrada");
+        }
+
+        return MarcaMapper.INSTANCE.toDTO(marcaOptional.get());
+    }
 }

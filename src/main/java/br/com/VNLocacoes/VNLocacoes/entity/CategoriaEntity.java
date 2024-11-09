@@ -27,7 +27,7 @@ public class CategoriaEntity {
     private String descricao;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "listaCategorias")
+    @OneToMany(mappedBy = "categoria")
     private List<CarroEntity> listaCarros = new ArrayList<>();
 
 }
