@@ -46,9 +46,21 @@ public class ManipuladorGlobalExcecao {
                         listaErros));
     }
 
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<RespostaExcecao> violacaoIntegridadeDeDadosExcecao(DataIntegrityViolationException e) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .body(new RespostaExcecao(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getCause().getLocalizedMessage()));
     }
+  
+    @ExceptionHandler(TokenVerificacaoExcecao.class)
+    public ResponseEntity<RespostaExcecao> tokenVerificacaoExcecao(TokenVerificacaoExcecao e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new RespostaExcecao(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+    }
+//    @ExceptionHandler(StackOverflowError.class)
+//    public ResponseEntity<RespostaExcecao> erro(StackOverflowError e) {
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                .body(new RespostaExcecao(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+//    }
 }

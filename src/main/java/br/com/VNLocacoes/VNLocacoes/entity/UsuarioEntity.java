@@ -6,7 +6,6 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,10 +30,11 @@ public class UsuarioEntity implements UserDetails {
 
     private UsuarioPapel papel;
 
+
     @JsonIgnore
     @OneToMany(mappedBy = "usuario")
     private List<AluguelEntity> listaAlugueis = new ArrayList<>();
-
+  
     public UsuarioEntity(String login, String senha, UsuarioPapel papel) {
         this.login = login;
         this.senha = senha;
