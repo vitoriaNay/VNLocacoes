@@ -59,4 +59,12 @@ public class MarcaController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Houve algum erro na requisição, tente novamente mais tarde");
     }
+
+    @GetMapping("/busca")
+    public ResponseEntity<MarcaDTO> buscarMarcaPorNome(@RequestParam(name = "nome") String nome) {
+        MarcaDTO marcaExistente = marcaService.buscarMarcaPorNome(nome);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(marcaExistente);
+    }
 }

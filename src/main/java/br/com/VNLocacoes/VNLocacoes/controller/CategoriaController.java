@@ -60,4 +60,12 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Houve algum erro na requisição, tente novamente mais tarde");
     }
+
+    @GetMapping("/busca")
+    public ResponseEntity<CategoriaDTO> buscarCategoriaPorNome(@RequestParam(name = "nome") String nome) {
+        CategoriaDTO categoriaExistente = categoriaService.buscarCategoriaPorNome(nome);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(categoriaExistente);
+    }
 }

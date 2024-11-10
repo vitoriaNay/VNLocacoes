@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -13,7 +14,7 @@ public class RespostaExcecao {
 
     private int status;
     private String message;
-    private List<String> erros;
+    private List<String> erros = new ArrayList<>();
 
     public RespostaExcecao(int status, String message) {
         this.status = status;
