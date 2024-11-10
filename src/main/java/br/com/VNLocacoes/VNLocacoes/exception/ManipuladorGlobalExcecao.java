@@ -19,6 +19,12 @@ public class ManipuladorGlobalExcecao {
                 .body(new RespostaExcecao(HttpStatus.NOT_FOUND.value(), e.getMessage()));
     }
 
+    @ExceptionHandler(RegistroJaExisteExcecao.class)
+    public ResponseEntity<RespostaExcecao> registroJaExisteExcecao(RegistroJaExisteExcecao e) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(new RespostaExcecao(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getMessage()));
+
+    }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<RespostaExcecao> corpoRequisicaoVazioExcecao(HttpMessageNotReadableException e) {

@@ -5,6 +5,7 @@ import br.com.VNLocacoes.VNLocacoes.dto.CategoriaDTO;
 import br.com.VNLocacoes.VNLocacoes.dto.MarcaDTO;
 import br.com.VNLocacoes.VNLocacoes.entity.CarroEntity;
 import br.com.VNLocacoes.VNLocacoes.entity.CategoriaEntity;
+import br.com.VNLocacoes.VNLocacoes.exception.RegistroJaExisteExcecao;
 import br.com.VNLocacoes.VNLocacoes.exception.RegistroNaoEncontradoExcecao;
 import br.com.VNLocacoes.VNLocacoes.mapper.CarroMapper;
 import br.com.VNLocacoes.VNLocacoes.mapper.CategoriaMapper;
@@ -39,17 +40,21 @@ public class CarroService {
     private MarcaService marcaService;
 
     public CarroDTO salvarCarro(CarroDTO carro) {
-        // VERIFICA SE A CATEGORIA INFORMADA EXISTE NO BANCO DE DADOS
-        CategoriaDTO categoria = categoriaService.buscarCategoriaPorNome(carro.getCategoria().getNome());
-        // VERIFICA SE A MARCA INFORMADA EXISTE NO BANCO DE DADOS
-        MarcaDTO marca = marcaService.buscarMarcaPorNome(carro.getMarca().getNome());
+        Optional<CarroEntity> carroOptional = carroRepository.findByPlaca(carro.getPlaca());
+        if (carroOptional.isEmpty()){// VERIFICA SE A CATEGORIA INFORMADA EXISTE NO BANCO DE DADOS
+            CategoriaDTO categoria = categoriaService.buscarCategoriaPorNome(carro.getCategoria().getNome());
+            // VERIFICA SE A MARCA INFORMADA EXISTE NO BANCO DE DADOS
+            MarcaDTO marca = marcaService.buscarMarcaPorNome(carro.getMarca().getNome());
 
-        carro.setCategoria(CategoriaMapper.INSTANCE.toEntity(categoria));
-        carro.setMarca(MarcaMapper.INSTANCE.toEntity(marca));
+            carro.setCategoria(CategoriaMapper.INSTANCE.toEntity(categoria));
+            carro.setMarca(MarcaMapper.INSTANCE.toEntity(marca));
 
-        CarroEntity carroSalvo = carroRepository.save(CarroMapper.INSTANCE.toEntity(carro));
+            CarroEntity carroSalvo = carroRepository.save(CarroMapper.INSTANCE.toEntity(carro));
 
-        return CarroMapper.INSTANCE.toDTO(carroSalvo);
+            return CarroMapper.INSTANCE.toDTO(carroSalvo);
+        } else {
+            throw new RegistroJaExisteExcecao("Já existe um carro registrado com a placa informada");
+        }
     }
 
     public List<CarroDTO> listarTodosOsCarros() {

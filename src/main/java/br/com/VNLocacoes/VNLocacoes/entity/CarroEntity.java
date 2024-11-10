@@ -27,7 +27,6 @@ public class CarroEntity {
 
     private int anoFabricacao;
 
-    @Column(unique = true)
     private String placa;
 
     private boolean disponibilidade;
