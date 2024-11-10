@@ -1,5 +1,6 @@
 package br.com.VNLocacoes.VNLocacoes.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -45,6 +46,13 @@ public class ManipuladorGlobalExcecao {
                         listaErros));
     }
 
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<RespostaExcecao> violacaoIntegridadeDeDadosExcecao(DataIntegrityViolationException e) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(new RespostaExcecao(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getCause().getLocalizedMessage()));
+    }
+  
     @ExceptionHandler(TokenVerificacaoExcecao.class)
     public ResponseEntity<RespostaExcecao> tokenVerificacaoExcecao(TokenVerificacaoExcecao e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

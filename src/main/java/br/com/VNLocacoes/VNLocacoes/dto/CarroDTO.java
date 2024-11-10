@@ -1,5 +1,6 @@
 package br.com.VNLocacoes.VNLocacoes.dto;
 
+import br.com.VNLocacoes.VNLocacoes.entity.AluguelEntity;
 import br.com.VNLocacoes.VNLocacoes.entity.CategoriaEntity;
 import br.com.VNLocacoes.VNLocacoes.entity.MarcaEntity;
 import jakarta.validation.constraints.NotNull;
@@ -7,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -36,4 +40,6 @@ public class CarroDTO {
 
     @NotNull(message = "Informe a categoria do veículo")
     private CategoriaEntity categoria;
+
+    private List<AluguelEntity> listaAlugueis = new ArrayList<>();
 }

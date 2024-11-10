@@ -29,6 +29,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/servicos/carro").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.DELETE, "/servicos/carro/{id}").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.PUT, "/servicos/carro/{id}").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.POST, "/cliente").hasRole("ADMIN")
                     .anyRequest().authenticated()
             )
