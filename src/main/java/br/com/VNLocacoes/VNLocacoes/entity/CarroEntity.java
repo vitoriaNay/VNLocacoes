@@ -40,4 +40,13 @@ public class CarroEntity {
     @ManyToOne
     @JoinColumn(name = "id_categoria", nullable = false)
     private CategoriaEntity categoria;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "carro")
+    private List<AluguelEntity> listaAlugueis = new ArrayList<>();
+
+    // Contrututor somente com a argumento da placa que será usado no AluguelService
+    public CarroEntity(String placa) {
+        this.placa = placa;
+    }
 }

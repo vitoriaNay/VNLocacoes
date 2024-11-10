@@ -1,5 +1,6 @@
 package br.com.VNLocacoes.VNLocacoes.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,9 +24,16 @@ public class PagamentoEntity {
 
     private BigDecimal valor;
 
-    private LocalDate data;
+    private LocalDate data = LocalDate.now();
 
-    private PagamentoTipo pagamento;
+    @Enumerated(EnumType.STRING)
+    private PagamentoTipo pagamentoTipo;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "pagamento")
+    private AluguelEntity aluguel;
 
+    public PagamentoEntity(BigDecimal valor) {
+        this.valor = valor;
+    }
 }
