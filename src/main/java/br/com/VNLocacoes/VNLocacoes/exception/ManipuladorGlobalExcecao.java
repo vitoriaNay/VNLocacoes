@@ -27,6 +27,12 @@ public class ManipuladorGlobalExcecao {
 
     }
 
+    @ExceptionHandler(CarroNaoDisponivelExcecao.class)
+    public ResponseEntity<RespostaExcecao> carroNaoEncontradoExcecao(CarroNaoDisponivelExcecao e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new RespostaExcecao(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<RespostaExcecao> corpoRequisicaoVazioExcecao(HttpMessageNotReadableException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
