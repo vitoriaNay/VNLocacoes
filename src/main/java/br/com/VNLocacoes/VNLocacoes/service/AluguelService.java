@@ -4,10 +4,7 @@ import br.com.VNLocacoes.VNLocacoes.dto.AluguelDTO;
 import br.com.VNLocacoes.VNLocacoes.dto.CarroDTO;
 import br.com.VNLocacoes.VNLocacoes.dto.ClienteDTO;
 import br.com.VNLocacoes.VNLocacoes.dto.PagamentoDTO;
-import br.com.VNLocacoes.VNLocacoes.entity.AluguelEntity;
-import br.com.VNLocacoes.VNLocacoes.entity.PagamentoEntity;
-import br.com.VNLocacoes.VNLocacoes.entity.StatusAluguel;
-import br.com.VNLocacoes.VNLocacoes.entity.UsuarioEntity;
+import br.com.VNLocacoes.VNLocacoes.entity.*;
 import br.com.VNLocacoes.VNLocacoes.exception.CarroNaoDisponivelExcecao;
 import br.com.VNLocacoes.VNLocacoes.exception.RegistroNaoEncontradoExcecao;
 import br.com.VNLocacoes.VNLocacoes.mapper.AluguelMapper;
@@ -43,12 +40,15 @@ public class AluguelService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
+    @Autowired
+    PagamentoMapper pagamentoMapper;
+
     public AluguelDTO salvarAluguel(AluguelDTO aluguel) {
         try {
             aluguel.setStatus(StatusAluguel.ATIVO);
 
-            PagamentoDTO pagamentoDTO = pagamentoService.salvarPagamento(PagamentoMapper.INSTANCE.toDTO(aluguel.getPagamento()));
-            aluguel.setPagamento(PagamentoMapper.INSTANCE.toEntity(pagamentoDTO));
+            PagamentoDTO pagamentoDTO = pagamentoService.salvarPagamento(pagamentoMapper.toDTO(aluguel.getPagamento()));
+            aluguel.setPagamento(pagamentoMapper.toEntity(pagamentoDTO));
 
             ClienteDTO clienteDTO = clienteService.buscarClientePorId(aluguel.getCliente().getId());
             aluguel.setCliente(ClienteMapper.INSTANCE.toEntity(clienteDTO));
@@ -88,7 +88,9 @@ public class AluguelService {
         }
 
         AluguelEntity aluguel = aluguelOptional.get();
-
+        // ALTERA A DISPONIBILIDADE DO CARRO UMA VEZ QUE O STATUS DO ALUGUEL É ALTERADO
+        CarroEntity carroAluguel = CarroMapper.INSTANCE.toEntity(carroService.alterarDisponibilidade(aluguel.getCarro().getId()));
+        aluguel.setCarro(carroAluguel);
         if (aluguel.getStatus() == StatusAluguel.ATIVO) {
             aluguel.setStatus(StatusAluguel.INATIVO);
         } else {

@@ -104,7 +104,7 @@ public class CarroService {
         return CarroMapper.INSTANCE.toDTO(carroAtualizado);
     }
 
-    public void alterarDisponibilidade(Long id) {
+    public CarroDTO alterarDisponibilidade(Long id) {
         Optional<CarroEntity> carroOptional = carroRepository.findById(id);
 
         if (carroOptional.isEmpty()) {
@@ -120,6 +120,8 @@ public class CarroService {
         }
 
         carroRepository.save(carroExistente);
+
+        return CarroMapper.INSTANCE.toDTO(carroExistente);
     }
 
     public boolean deletarCarro(Long id) {
