@@ -88,14 +88,19 @@ public class AluguelService {
         }
 
         AluguelEntity aluguel = aluguelOptional.get();
-        // ALTERA A DISPONIBILIDADE DO CARRO UMA VEZ QUE O STATUS DO ALUGUEL É ALTERADO
-        CarroEntity carroAluguel = CarroMapper.INSTANCE.toEntity(carroService.alterarDisponibilidade(aluguel.getCarro().getId()));
-        aluguel.setCarro(carroAluguel);
+
         if (aluguel.getStatus() == StatusAluguel.ATIVO) {
             aluguel.setStatus(StatusAluguel.INATIVO);
         } else {
+            // CASO O ALUGUEL TENTE SER REATIVADO, MAS O CARRO ESTIVER INDISPONÍVEL, LANÇA UMA EXCEÇÃO
+            if(!aluguel.getCarro().isDisponibilidade()) {
+                throw new CarroNaoDisponivelExcecao("Reativar este aluguel não é possível, pois o carro desejado encontra-se em outro aluguel ativo");
+            }
             aluguel.setStatus(StatusAluguel.ATIVO);
         }
+        // ALTERA A DISPONIBILIDADE DO CARRO UMA VEZ QUE O STATUS DO ALUGUEL É ALTERADO
+        CarroEntity carroAluguel = CarroMapper.INSTANCE.toEntity(carroService.alterarDisponibilidade(aluguel.getCarro().getId()));
+        aluguel.setCarro(carroAluguel);
 
         return AluguelMapper.INSTANCE.toDTO(aluguelRepository.save(aluguel));
     }

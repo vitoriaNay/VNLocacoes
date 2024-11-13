@@ -1,6 +1,7 @@
 package br.com.VNLocacoes.VNLocacoes.dto;
 
 import br.com.VNLocacoes.VNLocacoes.entity.AluguelEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -34,5 +35,6 @@ public class ClienteDTO {
     @Pattern(regexp = "^([A-Za-z0-9_\\.]*)@([a-z]+)(\\.[a-z]+)$", message = "O E-mail informado é inválido")
     private String email;
 
+    @JsonIgnore
     private List<AluguelEntity> listaAlugueis = new ArrayList<>();
 }

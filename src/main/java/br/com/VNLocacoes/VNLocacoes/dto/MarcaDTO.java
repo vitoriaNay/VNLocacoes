@@ -1,6 +1,7 @@
 package br.com.VNLocacoes.VNLocacoes.dto;
 
 import br.com.VNLocacoes.VNLocacoes.entity.CarroEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,5 +21,6 @@ public class MarcaDTO {
     @NotNull(message = "O nome da marca é obrigatório")
     private String nome;
 
+    @JsonIgnore
     private List<CarroEntity> listaCarros;
 }
