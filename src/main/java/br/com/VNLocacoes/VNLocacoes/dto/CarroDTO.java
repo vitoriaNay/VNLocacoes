@@ -3,6 +3,7 @@ package br.com.VNLocacoes.VNLocacoes.dto;
 import br.com.VNLocacoes.VNLocacoes.entity.AluguelEntity;
 import br.com.VNLocacoes.VNLocacoes.entity.CategoriaEntity;
 import br.com.VNLocacoes.VNLocacoes.entity.MarcaEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,5 +42,6 @@ public class CarroDTO {
     @NotNull(message = "Informe a categoria do veículo")
     private CategoriaEntity categoria;
 
+    @JsonIgnore
     private List<AluguelEntity> listaAlugueis = new ArrayList<>();
 }

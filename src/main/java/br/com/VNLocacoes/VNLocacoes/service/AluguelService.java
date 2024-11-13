@@ -4,10 +4,8 @@ import br.com.VNLocacoes.VNLocacoes.dto.AluguelDTO;
 import br.com.VNLocacoes.VNLocacoes.dto.CarroDTO;
 import br.com.VNLocacoes.VNLocacoes.dto.ClienteDTO;
 import br.com.VNLocacoes.VNLocacoes.dto.PagamentoDTO;
-import br.com.VNLocacoes.VNLocacoes.entity.AluguelEntity;
-import br.com.VNLocacoes.VNLocacoes.entity.PagamentoEntity;
-import br.com.VNLocacoes.VNLocacoes.entity.StatusAluguel;
-import br.com.VNLocacoes.VNLocacoes.entity.UsuarioEntity;
+import br.com.VNLocacoes.VNLocacoes.entity.*;
+import br.com.VNLocacoes.VNLocacoes.exception.CarroNaoDisponivelExcecao;
 import br.com.VNLocacoes.VNLocacoes.exception.RegistroNaoEncontradoExcecao;
 import br.com.VNLocacoes.VNLocacoes.mapper.AluguelMapper;
 import br.com.VNLocacoes.VNLocacoes.mapper.CarroMapper;
@@ -42,18 +40,28 @@ public class AluguelService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
+    @Autowired
+    PagamentoMapper pagamentoMapper;
+
     public AluguelDTO salvarAluguel(AluguelDTO aluguel) {
         try {
             aluguel.setStatus(StatusAluguel.ATIVO);
 
-            PagamentoDTO pagamentoDTO = pagamentoService.salvarPagamento(PagamentoMapper.INSTANCE.toDTO(aluguel.getPagamento()));
-            aluguel.setPagamento(PagamentoMapper.INSTANCE.toEntity(pagamentoDTO));
+            PagamentoDTO pagamentoDTO = pagamentoService.salvarPagamento(pagamentoMapper.toDTO(aluguel.getPagamento()));
+            aluguel.setPagamento(pagamentoMapper.toEntity(pagamentoDTO));
 
             ClienteDTO clienteDTO = clienteService.buscarClientePorId(aluguel.getCliente().getId());
             aluguel.setCliente(ClienteMapper.INSTANCE.toEntity(clienteDTO));
 
             CarroDTO carroDTO = carroService.buscarCarroPorPlaca(aluguel.getCarro().getPlaca());
+            // VERIFICA A DISPONIBILIDADE DO CARRO QUE ESTÁ TENTANDO SER ALUGADO
+            if (!carroDTO.isDisponibilidade()) {
+                // SE NÃO ESTIVER DISPONÍVEL, LANÇA UMA EXCEPTION
+                throw new CarroNaoDisponivelExcecao();
+            }
+
             aluguel.setCarro(CarroMapper.INSTANCE.toEntity(carroDTO));
+
 
             // OBTENDO OS DADOS DO USUÁRIO LOGADO
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -63,10 +71,12 @@ public class AluguelService {
             aluguel.setUsuario((UsuarioEntity) usuario);
 
             AluguelEntity aluguelSalvo = aluguelRepository.save(AluguelMapper.INSTANCE.toEntity(aluguel));
+            // APÓS REALIZAR O ALUGUEL, MUDA A DISPONIBILIDADE DO CARRO
+            carroService.alterarDisponibilidade(aluguelSalvo.getCarro().getId());
 
             return AluguelMapper.INSTANCE.toDTO(aluguelSalvo);
-        } catch (Exception e) {
-            throw new RuntimeException("Ocorreu um erro inesperado");
+        } catch (CarroNaoDisponivelExcecao e) {
+            throw new CarroNaoDisponivelExcecao();
         }
     }
 
@@ -82,8 +92,15 @@ public class AluguelService {
         if (aluguel.getStatus() == StatusAluguel.ATIVO) {
             aluguel.setStatus(StatusAluguel.INATIVO);
         } else {
+            // CASO O ALUGUEL TENTE SER REATIVADO, MAS O CARRO ESTIVER INDISPONÍVEL, LANÇA UMA EXCEÇÃO
+            if(!aluguel.getCarro().isDisponibilidade()) {
+                throw new CarroNaoDisponivelExcecao("Reativar este aluguel não é possível, pois o carro desejado encontra-se em outro aluguel ativo");
+            }
             aluguel.setStatus(StatusAluguel.ATIVO);
         }
+        // ALTERA A DISPONIBILIDADE DO CARRO UMA VEZ QUE O STATUS DO ALUGUEL É ALTERADO
+        CarroEntity carroAluguel = CarroMapper.INSTANCE.toEntity(carroService.alterarDisponibilidade(aluguel.getCarro().getId()));
+        aluguel.setCarro(carroAluguel);
 
         return AluguelMapper.INSTANCE.toDTO(aluguelRepository.save(aluguel));
     }

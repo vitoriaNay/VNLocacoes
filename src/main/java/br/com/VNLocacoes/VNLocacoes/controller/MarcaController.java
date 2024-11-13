@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -52,8 +53,13 @@ public class MarcaController {
         boolean statusDelecao = marcaService.deletarMarca(id);
 
         if (statusDelecao) {
+            // TESTE DE RESPONSE DA API
+            HashMap<String, Object> response = new HashMap<>();
+            response.put("status", 200);
+            response.put("mensagem", "Marca deletada com sucesso");
+
             return ResponseEntity.status(HttpStatus.OK)
-                    .body("Marca excluída com sucesso");
+                    .body(response);
         }
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

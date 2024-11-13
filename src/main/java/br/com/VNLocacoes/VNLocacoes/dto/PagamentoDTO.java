@@ -2,6 +2,7 @@ package br.com.VNLocacoes.VNLocacoes.dto;
 
 import br.com.VNLocacoes.VNLocacoes.entity.AluguelEntity;
 import br.com.VNLocacoes.VNLocacoes.entity.PagamentoTipo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,5 +27,6 @@ public class PagamentoDTO {
     @NotNull(message = "Informe o tipo do pagamento")
     private PagamentoTipo pagamentoTipo;
 
+    @JsonIgnore
     private AluguelEntity aluguel;
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,8 +55,13 @@ public class ClienteController {
         boolean statusDelecao = clienteService.deletarCliente(id);
 
         if (statusDelecao) {
+            // TESTE DE RESPONSE DA API
+            HashMap<String, Object> response = new HashMap<>();
+            response.put("status", 200);
+            response.put("mensagem", "Cliente deletado com sucesso");
+
             return ResponseEntity.status(HttpStatus.OK)
-                    .body("Cliente excluído com sucesso");
+                    .body(response);
         }
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

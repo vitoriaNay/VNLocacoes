@@ -104,6 +104,26 @@ public class CarroService {
         return CarroMapper.INSTANCE.toDTO(carroAtualizado);
     }
 
+    public CarroDTO alterarDisponibilidade(Long id) {
+        Optional<CarroEntity> carroOptional = carroRepository.findById(id);
+
+        if (carroOptional.isEmpty()) {
+            throw new RegistroNaoEncontradoExcecao("Carro não encontrado na base de dados");
+        }
+
+        CarroEntity carroExistente = carroOptional.get();
+
+        if (carroExistente.isDisponibilidade()) {
+            carroExistente.setDisponibilidade(false);
+        } else {
+            carroExistente.setDisponibilidade(true);
+        }
+
+        carroRepository.save(carroExistente);
+
+        return CarroMapper.INSTANCE.toDTO(carroExistente);
+    }
+
     public boolean deletarCarro(Long id) {
         Optional<CarroEntity> carroOptional = carroRepository.findById(id);
 
