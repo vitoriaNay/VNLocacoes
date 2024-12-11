@@ -1,6 +1,8 @@
 package br.com.VNLocacoes.VNLocacoes.controller;
 
 import br.com.VNLocacoes.VNLocacoes.dto.CarroDTO;
+import br.com.VNLocacoes.VNLocacoes.repository.CategoriaRepository;
+import br.com.VNLocacoes.VNLocacoes.repository.MarcaRepository;
 import br.com.VNLocacoes.VNLocacoes.service.CarroService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +15,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/servicos/carro")
+@CrossOrigin(origins = "*")
 public class CarroController {
 
     @Autowired
     private CarroService carroService;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private MarcaRepository marcaRepository;
+
     @PostMapping
     public ResponseEntity<CarroDTO> salvarCarro(@RequestBody @Valid CarroDTO carro) {
+        carro.setCategoria(categoriaRepository.findById(carro.getCategoria().getId()).get());
+        carro.setMarca(marcaRepository.findById(carro.getMarca().getId()).get());
         CarroDTO carroSalvo = carroService.salvarCarro(carro);
 
         return ResponseEntity.status(HttpStatus.CREATED)
