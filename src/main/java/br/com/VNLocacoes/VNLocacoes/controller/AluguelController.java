@@ -9,7 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/aluguel")
+@RequestMapping("/servicos/aluguel")
+@CrossOrigin(origins = "*")
 public class AluguelController {
 
     @Autowired
