@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController // COMBINA AS ANOTAÇÕES DE @Controller e @ResponseBody, ÚTIL PARA DESENVOLVER SERVIÇOS RESTful
-@RequestMapping("/cliente") // MAPEIA AS SOLICITAÇÕES DA WEB QUE SERÃO ATENDIDAS POR ESTE CONTROLADOR
+@RequestMapping("/servicos/cliente") // MAPEIA AS SOLICITAÇÕES DA WEB QUE SERÃO ATENDIDAS POR ESTE CONTROLADOR
+@CrossOrigin(origins = "*")
 public class ClienteController {
 
     @Autowired // ESPECIFICA QUE ESTA DEPENDÊNCIA DEVERÁ SER INJETADA PELO SPRING BOOT
