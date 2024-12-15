@@ -20,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -53,7 +55,7 @@ public class AluguelService {
             ClienteDTO clienteDTO = clienteService.buscarClientePorId(aluguel.getCliente().getId());
             aluguel.setCliente(ClienteMapper.INSTANCE.toEntity(clienteDTO));
 
-            CarroDTO carroDTO = carroService.buscarCarroPorPlaca(aluguel.getCarro().getPlaca());
+            CarroDTO carroDTO = carroService.buscarCarroPorId(aluguel.getCarro().getId());
             // VERIFICA A DISPONIBILIDADE DO CARRO QUE ESTÁ TENTANDO SER ALUGADO
             if (!carroDTO.isDisponibilidade()) {
                 // SE NÃO ESTIVER DISPONÍVEL, LANÇA UMA EXCEPTION
@@ -62,22 +64,23 @@ public class AluguelService {
 
             aluguel.setCarro(CarroMapper.INSTANCE.toEntity(carroDTO));
 
-
-            // OBTENDO OS DADOS DO USUÁRIO LOGADO
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-            UsuarioEntity usuarioInfo = (UsuarioEntity) auth.getPrincipal();
-            UserDetails usuario = usuarioRepository.findByLogin(usuarioInfo.getLogin());
-            aluguel.setUsuario((UsuarioEntity) usuario);
-
             AluguelEntity aluguelSalvo = aluguelRepository.save(AluguelMapper.INSTANCE.toEntity(aluguel));
             // APÓS REALIZAR O ALUGUEL, MUDA A DISPONIBILIDADE DO CARRO
             carroService.alterarDisponibilidade(aluguelSalvo.getCarro().getId());
-
+            pagamentoDTO.setAluguel(aluguelSalvo);
+            pagamentoService.atualizarPagamento(pagamentoDTO);
             return AluguelMapper.INSTANCE.toDTO(aluguelSalvo);
         } catch (CarroNaoDisponivelExcecao e) {
             throw new CarroNaoDisponivelExcecao();
         }
+    }
+
+    public List<AluguelDTO> listarTodosOsAlugueis() {
+        List<AluguelDTO> listaAlugueis = new ArrayList<>();
+
+        aluguelRepository.findAll().forEach((aluguel) -> listaAlugueis.add(AluguelMapper.INSTANCE.toDTO(aluguel)));
+
+        return listaAlugueis;
     }
 
     public AluguelDTO alterarStatusDoAluguel(Long id) {

@@ -18,4 +18,9 @@ public class PagamentoService {
 
         return PagamentoMapper.INSTANCE.toDTO(pagamentoSalvo);
     }
+
+    public PagamentoDTO atualizarPagamento(PagamentoDTO pagamento) {
+        PagamentoEntity pagamentoAtualizado = pagamentoRepository.save(PagamentoMapper.INSTANCE.toEntity(pagamento));
+        return PagamentoMapper.INSTANCE.toDTO(pagamentoAtualizado);
+    }
 }

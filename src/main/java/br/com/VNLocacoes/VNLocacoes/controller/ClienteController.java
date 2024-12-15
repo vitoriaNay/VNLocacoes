@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController // COMBINA AS ANOTAÇÕES DE @Controller e @ResponseBody, ÚTIL PARA DESENVOLVER SERVIÇOS RESTful
 @RequestMapping("/servicos/cliente") // MAPEIA AS SOLICITAÇÕES DA WEB QUE SERÃO ATENDIDAS POR ESTE CONTROLADOR
 @CrossOrigin(origins = "*")

@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/servicos/aluguel")
 @CrossOrigin(origins = "*")
@@ -22,6 +24,13 @@ public class AluguelController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(aluguelSalvo);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AluguelDTO>> listarTodosOsAlugueis() {
+        List<AluguelDTO> listaAlugueis = aluguelService.listarTodosOsAlugueis();
+
+        return ResponseEntity.status(HttpStatus.OK).body(listaAlugueis);
     }
 
     @PutMapping("/{id}")

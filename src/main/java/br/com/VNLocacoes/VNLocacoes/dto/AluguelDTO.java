@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class AluguelDTO {
     private Long id;
 
-    private LocalDate dataInicio = LocalDate.now();
+    private LocalDate dataInicio;
 
     @NotNull(message = "Informe a data do fim do aluguel")
     private LocalDate dataFim;

@@ -74,6 +74,16 @@ public class CarroService {
         return listaCarros;
     }
 
+    public CarroDTO buscarCarroPorId(Long id) {
+        Optional<CarroEntity> carroOptional = carroRepository.findById(id);
+
+        if (carroOptional.isEmpty()) {
+            throw new RegistroNaoEncontradoExcecao("Carro não encontrado na base de dados");
+        }
+
+        return CarroMapper.INSTANCE.toDTO(carroOptional.get());
+    }
+
     public CarroDTO buscarCarroPorPlaca(String placa) {
         Optional<CarroEntity> carroOptional = carroRepository.findByPlaca(placa);
 

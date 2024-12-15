@@ -41,6 +41,6 @@ public class AluguelEntity {
     private CarroEntity carro;
 
     @ManyToOne // Um aluguel só poderá ser feito por um funcionário, mas um funcionário poderá fazer muitos aluguéis
-    @JoinColumn(name= "id_usuario", nullable = false)
+    @JoinColumn(name= "id_usuario", nullable = true)
     private UsuarioEntity usuario;
 }
