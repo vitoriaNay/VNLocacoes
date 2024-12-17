@@ -30,10 +30,6 @@ public class UsuarioEntity implements UserDetails {
 
     private UsuarioPapel papel;
 
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "usuario")
-    private List<AluguelEntity> listaAlugueis = new ArrayList<>();
   
     public UsuarioEntity(String login, String senha, UsuarioPapel papel) {
         this.login = login;

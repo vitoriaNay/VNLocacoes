@@ -39,8 +39,4 @@ public class AluguelEntity {
     @ManyToOne // Um Aluguel estará associado a no mínimo 1 e no máximo n ocorrências da tabela carro
     @JoinColumn(name = "id_carro", nullable = false)
     private CarroEntity carro;
-
-    @ManyToOne // Um aluguel só poderá ser feito por um funcionário, mas um funcionário poderá fazer muitos aluguéis
-    @JoinColumn(name= "id_usuario", nullable = true)
-    private UsuarioEntity usuario;
 }

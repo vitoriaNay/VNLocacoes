@@ -30,6 +30,4 @@ public class AluguelDTO {
 
     @NotNull(message = "Informe os dados do veículo")
     private CarroEntity carro;
-
-    private UsuarioEntity usuario;
 }
